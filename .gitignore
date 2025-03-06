@@ -1,0 +1,9 @@
+# Ignorar a pasta .idea
+.idea/
+
+# Ignorar arquivos e pastas do Terraform
+.terraform/
+terraform.tfstate
+terraform.tfstate.backup
+.terraform.lock.hcl
+.terraform.tfstate.lock.info
