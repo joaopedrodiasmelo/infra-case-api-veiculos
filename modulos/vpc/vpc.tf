@@ -41,6 +41,16 @@
     }
   }
 
+  resource "aws_subnet" "subnet_privada2" {
+    vpc_id            = aws_vpc.vpc_case_veiculos.id
+    cidr_block        = "10.0.4.0/24"
+    availability_zone = "us-east-1b"
+
+    tags = {
+      Name = "sub-rede-privada2"
+    }
+  }
+
   # Criação do Internet Gateway para permitir acesso à internet
   resource "aws_internet_gateway" "igw" {
     vpc_id = aws_vpc.vpc_case_veiculos.id
