@@ -4,6 +4,28 @@ module "vpc" {
   cluster_name = var.cluster_name
   aws_region =  var.aws_region
 }
+module "ec2" {
+  source = "./modulos/ec2"
+
+  vpc_id = module.vpc.vpc_id
+  private_subnet_id = module.vpc.private_subnet_id
+}
+
+module "secrets_manager" {
+  source = "./modulos/secrets_manager"
+
+  ec2_ip_privado = module.ec2.ec2_ip_privado
+  redis_endpoint = module.elasticache.redis_endpoint
+}
+
+module "elasticache" {
+  source = "./modulos/elasticache"
+
+  vpc_id = module.vpc.vpc_id
+  private_subnet_id = module.vpc.private_subnet_id
+  private_subnet_id2 = module.vpc.private_subnet_id2
+}
+
 
 module "cluster_eks" {
   source = "./modulos/eks/cluster"
@@ -15,6 +37,9 @@ module "cluster_eks" {
   vpc_id = module.vpc.vpc_id
   private_subnet_id = module.vpc.private_subnet_id
   private_subnet_id2 = module.vpc.private_subnet_id2
+
+  secrets_manager_arn = module.secrets_manager.secrets_manager_arn
+  redis_arn = module.elasticache.redis_arn
 }
 
 module "eks_nodes" {
