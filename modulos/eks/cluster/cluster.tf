@@ -26,15 +26,3 @@ provider "kubernetes" {
   token                  = data.aws_eks_cluster_auth.cluster.token
 }
 
-# Service Account com dependência explícita
-resource "kubernetes_service_account" "eks_service_account" {
-  metadata {
-    name      = "${var.cluster_name}-service-account"
-    namespace = "kube-system"
-    annotations = {
-      "eks.amazonaws.com/role-arn" = aws_iam_role.eks_pod_role.arn
-    }
-  }
-
-  depends_on = [aws_eks_cluster.eks_cluster]
-}

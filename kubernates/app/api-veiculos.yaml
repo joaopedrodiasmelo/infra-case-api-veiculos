@@ -15,9 +15,10 @@ spec:
         k8s-app: mock-api
         name: mock-api
     spec:
+      serviceAccountName: eks-case-veiculos-service-account
       terminationGracePeriodSeconds: 60
       containers:
-        - image: joaopedro22/mock-api:latest
+        - image: joaopedro22/case-veiculos:latest
           name: mock-api
           ports:
             - name: http
@@ -50,7 +51,7 @@ spec:
   rules:
     - http:
         paths:
-          - path: /api-in-dados-veiculos.icarros.com.br/v1/placa
+          - path: /api-jp-case/veiculos
             pathType: Prefix
             backend:
               service:

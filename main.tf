@@ -16,6 +16,7 @@ module "secrets_manager" {
 
   ec2_ip_privado = module.ec2.ec2_ip_privado
   redis_endpoint = module.elasticache.redis_endpoint
+  redis_port = module.elasticache.redis_port
 }
 
 module "elasticache" {
