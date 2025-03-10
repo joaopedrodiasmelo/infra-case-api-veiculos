@@ -1,0 +1,63 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: mock-api
+  labels:
+    k8s-app: mock-api
+spec:
+  replicas: 2
+  selector:
+    matchLabels:
+      k8s-app: mock-api
+  template:
+    metadata:
+      labels:
+        k8s-app: mock-api
+        name: mock-api
+    spec:
+      serviceAccountName: eks-case-veiculos-service-account
+      terminationGracePeriodSeconds: 60
+      containers:
+        - image: joaopedro22/case-veiculos:latest
+          name: mock-api
+          ports:
+            - name: http
+              containerPort: 8090
+          resources:
+            requests:
+              cpu: "250m"
+              memory: "512Mi"
+---
+kind: Service
+apiVersion: v1
+metadata:
+  name: mock-api
+spec:
+  selector:
+    k8s-app: mock-api
+  ports:
+    - protocol: TCP
+      port: 80
+      targetPort: 8090
+      name: web
+  type: ClusterIP
+---
+apiVersion: networking.k8s.io/v1
+kind: Ingress
+metadata:
+  name: mock-api-ingress
+spec:
+  ingressClassName: traefik
+  rules:
+    - http:
+        paths:
+          - path: /api-jp-case/veiculos
+            pathType: Prefix
+            backend:
+              service:
+                name: mock-api
+                port:
+                  number: 80
+
+
+
